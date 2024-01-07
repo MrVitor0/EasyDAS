@@ -1,6 +1,7 @@
 import TaxCalculator as tc
 from CompoundInterestCalculator import CompoundInterestCalculator
 from multiprocessing import Process
+import os
 
 def main_menu():
     print("\nMenu Principal:")
@@ -9,9 +10,13 @@ def main_menu():
     choice = input("\nEscolha a funcionalidade (1 ou 2): \n")
 
     if choice == "1":
+        #clear console
+        os.system('cls' if os.name == 'nt' else 'clear')
         tax_calculator = tc.TaxCalculator()
         tax_calculator.menu()
     elif choice == "2":
+        #clear console
+        os.system('cls' if os.name == 'nt' else 'clear')
         compound_interest_menu()
     else:
         print("Escolha inválida. Por favor, escolha 1 ou 2.")
@@ -25,7 +30,7 @@ def compound_interest_menu():
     interest_calculator = CompoundInterestCalculator(initial_amount, monthly_investment, annual_interest_rate, investment_period)
     future_value = interest_calculator.calculate_compound_interest()
 
-    print(f"\nApós investir por {investment_period} ano(s): ${future_value:.2f}")
+    print(f"\nApós investir por {investment_period} ano(s): {future_value}")
 
     # Utiliza multiprocessing para exibir o gráfico e a tabela simultaneamente
     graph_process = Process(target=interest_calculator.plot_history)

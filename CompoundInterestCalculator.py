@@ -2,6 +2,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import tkinter as tk
 from tkinter import ttk
+import locale
+
+locale.setlocale(locale.LC_MONETARY, 'pt_BR')
 
 class CompoundInterestCalculator:
     def __init__(self, initial_amount, monthly_investment, annual_interest_rate, investment_period):
@@ -15,7 +18,7 @@ class CompoundInterestCalculator:
         monthly_interest_rate = self.annual_interest_rate / 100 / 12
         total_months = self.investment_period * 12
 
-        total_invested = 0
+        total_invested = self.initial_amount
         total_interest = 0
         future_value = self.initial_amount
 
@@ -26,39 +29,48 @@ class CompoundInterestCalculator:
             future_value = total_invested + total_interest
             self.history.append(future_value)
 
-        return future_value
+        return locale.currency(future_value, grouping=True) 
 
     def plot_history(self):
         plt.style.use('_mpl-gallery')
-        fig, ax = plt.subplots(figsize=(10, 6))  # Definindo um tamanho inicial
+        fig, ax = plt.subplots(figsize=(10, 6))
 
-        # Adiciona labels aos pontos do gráfico
+        total_invested = self.initial_amount
+        total_interest = 0
+
         for i, value in enumerate(self.history, start=0):
-            ax.text(i, value + 0.1, f'R${value:.2f}', ha='center', va='bottom', fontsize=8)
+            monthly_interest = (total_invested + total_interest) * (self.annual_interest_rate / 100 / 12)
+            total_interest += monthly_interest
+
+            if i >= 1:
+                total_invested += self.monthly_investment
+
+            total_acumulado = total_invested + total_interest
+            formatted_total_acumulado = locale.currency(total_acumulado, grouping=True)
+
+            ax.text(i, total_acumulado + 0.1, f'{formatted_total_acumulado}', ha='center', va='bottom', fontsize=8, color="white")
+
 
         ax.bar(range(len(self.history)), self.history, width=1, edgecolor="white", linewidth=0.7)
 
         ax.set(xlim=(-0.5, len(self.history) - 0.5), ylim=(0, max(self.history) + 1),
             xticks=np.arange(0, len(self.history)), yticks=[])
 
-        # Adiciona padding ao redor do gráfico
         plt.margins(x=0.1)
         plt.xlabel('Meses')
-        plt.ylabel('')  # Label vazia para o eixo Y
+        plt.ylabel('')
         plt.title('Juros Compostos ao Longo do Tempo')
 
-        # Define o tamanho para a janela (modo janela)
         mng = plt.get_current_fig_manager()
-        mng.window.state('normal')  # Modo janela
-
-        # Ajusta os parâmetros bottom e top
+        mng.window.state('normal')
         plt.subplots_adjust(bottom=0.06, top=0.943)
         ax.xaxis.grid(False)
         plt.show()
 
 
+
     def display_table(self):
-        total_invested = 0
+        total_invested = self.initial_amount
         total_interest = 0
 
         table_window = tk.Toplevel()
@@ -69,11 +81,19 @@ class CompoundInterestCalculator:
 
         for i, value in enumerate(self.history, start=0):
             monthly_interest = (total_invested + total_interest) * (self.annual_interest_rate / 100 / 12)
-            total_invested += self.monthly_investment
             total_interest += monthly_interest
-            total_acumulado = total_invested + total_interest
+            if i >= 1:
+              total_invested += self.monthly_investment
 
-            tree.insert("", tk.END, values=(i, f'R${monthly_interest:.2f}', f'R${total_invested:.2f}', f'R${total_interest:.2f}', f'R${total_acumulado:.2f}'))
+            total_acumulado = total_invested + total_interest
+           
+
+            formatted_monthly_interest = locale.currency(monthly_interest, grouping=True)
+            formatted_total_invested = locale.currency(total_invested, grouping=True)
+            formatted_total_interest = locale.currency(total_interest, grouping=True)
+            formatted_total_acumulado = locale.currency(total_acumulado, grouping=True)
+
+            tree.insert("", tk.END, values=(i, formatted_monthly_interest, formatted_total_invested, formatted_total_interest, formatted_total_acumulado))
 
         tree.column("#0", anchor=tk.W, width=50)
         tree.column("Meses", anchor=tk.W, width=50)
