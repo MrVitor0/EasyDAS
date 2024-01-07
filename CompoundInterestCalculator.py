@@ -34,7 +34,7 @@ class CompoundInterestCalculator:
 
         # Adiciona labels aos pontos do gráfico
         for i, value in enumerate(self.history, start=0):
-            ax.text(i, value + 0.1, f'{value:.2f}', ha='center', va='bottom', fontsize=8)
+            ax.text(i, value + 0.1, f'R${value:.2f}', ha='center', va='bottom', fontsize=8)
 
         ax.bar(range(len(self.history)), self.history, width=1, edgecolor="white", linewidth=0.7)
 
@@ -43,9 +43,9 @@ class CompoundInterestCalculator:
 
         # Adiciona padding ao redor do gráfico
         plt.margins(x=0.1)
-        plt.xlabel('Months')
+        plt.xlabel('Meses')
         plt.ylabel('')  # Label vazia para o eixo Y
-        plt.title('Compound Interest Over Time')
+        plt.title('Juros Compostos ao Longo do Tempo')
 
         # Define o tamanho para a janela (modo janela)
         mng = plt.get_current_fig_manager()
@@ -62,10 +62,10 @@ class CompoundInterestCalculator:
         total_interest = 0
 
         table_window = tk.Toplevel()
-        table_window.title("Compound Interest Table")
+        table_window.title("Informativo de Juros Compostos")
 
         tree = ttk.Treeview(table_window)
-        tree["columns"] = ("Month", "Juros", "Total Investido", "Total Juros", "Total Acumulado")
+        tree["columns"] = ("Meses", "Juros", "Total Investido", "Total Juros", "Total Acumulado")
 
         for i, value in enumerate(self.history, start=0):
             monthly_interest = (total_invested + total_interest) * (self.annual_interest_rate / 100 / 12)
@@ -73,17 +73,17 @@ class CompoundInterestCalculator:
             total_interest += monthly_interest
             total_acumulado = total_invested + total_interest
 
-            tree.insert("", tk.END, values=(i, f'{monthly_interest:.2f}', f'{total_invested:.2f}', f'{total_interest:.2f}', f'{total_acumulado:.2f}'))
+            tree.insert("", tk.END, values=(i, f'R${monthly_interest:.2f}', f'R${total_invested:.2f}', f'R${total_interest:.2f}', f'R${total_acumulado:.2f}'))
 
         tree.column("#0", anchor=tk.W, width=50)
-        tree.column("Month", anchor=tk.W, width=50)
+        tree.column("Meses", anchor=tk.W, width=50)
         tree.column("Juros", anchor=tk.W, width=120)
         tree.column("Total Investido", anchor=tk.W, width=120)
         tree.column("Total Juros", anchor=tk.W, width=120)
         tree.column("Total Acumulado", anchor=tk.W, width=120)
 
         tree.heading("#0", text="", anchor=tk.W)
-        tree.heading("Month", text="Month", anchor=tk.W)
+        tree.heading("Meses", text="Meses", anchor=tk.W)
         tree.heading("Juros", text="Juros", anchor=tk.W)
         tree.heading("Total Investido", text="Total Investido", anchor=tk.W)
         tree.heading("Total Juros", text="Total Juros", anchor=tk.W)
