@@ -3,10 +3,10 @@ from CompoundInterestCalculator import CompoundInterestCalculator
 from multiprocessing import Process
 
 def main_menu():
-    print("Menu Principal:")
+    print("\nMenu Principal:")
     print("1. Calculadora de Impostos")
     print("2. Calculadora de Juros Compostos")
-    choice = input("Escolha a funcionalidade (1 ou 2): ")
+    choice = input("\nEscolha a funcionalidade (1 ou 2): \n")
 
     if choice == "1":
         tax_calculator = tc.TaxCalculator()

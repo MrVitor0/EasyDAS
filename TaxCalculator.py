@@ -47,16 +47,17 @@ class TaxCalculator:
     def menu(self):
         while True:
             TaxCalculator.clear_console()
-            print("\nMenu:")
+            print("\nMenu:\n")
             print("1. Calcular Imposto Mensal")
             print("2. Obter Pro Labore")
-            print("3. Sair")
-            option = input("Escolha uma opção: ")
+            print("3. Sair\n")
+            option = input("Escolha uma opção: \n")
 
             if option == '1':
                 amount = TaxCalculator.get_float_input("Digite o valor: ")
                 total_tax = TaxCalculator.calculate_monthly_tax(amount)
                 print("\nTotal de impostos: ", total_tax)
+                print("Valor líquido: ", amount - total_tax, "\n")
             elif option == '2':
                 amount = TaxCalculator.get_float_input("Digite o valor: ")
                 pro_labor_result = TaxCalculator.calculate_pro_labor(amount)
